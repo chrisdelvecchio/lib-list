@@ -62,6 +62,7 @@ CMAKE_BINARY_DIR = C:\Users\fleek\CProjects\lib-list\build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/list.dir/all
 all: CMakeFiles/liblist.dir/all
 .PHONY : all
 
@@ -70,8 +71,35 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/list.dir/clean
 clean: CMakeFiles/liblist.dir/clean
 .PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/list.dir
+
+# All Build rule for target.
+CMakeFiles/list.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\list.dir\build.make CMakeFiles/list.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\list.dir\build.make CMakeFiles/list.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\fleek\CProjects\lib-list\build\CMakeFiles --progress-num=4,5 "Built target list"
+.PHONY : CMakeFiles/list.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/list.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\fleek\CProjects\lib-list\build\CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/list.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\fleek\CProjects\lib-list\build\CMakeFiles 0
+.PHONY : CMakeFiles/list.dir/rule
+
+# Convenience name for target.
+list: CMakeFiles/list.dir/rule
+.PHONY : list
+
+# clean rule for target.
+CMakeFiles/list.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\list.dir\build.make CMakeFiles/list.dir/clean
+.PHONY : CMakeFiles/list.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/liblist.dir

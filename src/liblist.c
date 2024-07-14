@@ -10,7 +10,7 @@ List *NewList(List *optional) {
     exit(EXIT_FAILURE);
   }
 
-  *list->data = malloc(INIT_CAP * sizeof(void *));
+  list->data = malloc(10 * sizeof(void *));
 
   if (list->data == NULL) {
     fprintf(stderr,
@@ -21,7 +21,7 @@ List *NewList(List *optional) {
   }
 
   list->size = 0;
-  list->capacity = INIT_CAP;
+  list->capacity = 10;
 
   if (optional != NULL) {
     ListCopy(optional, list);
@@ -37,7 +37,7 @@ void ListFreeMemory(List *list) {
 void ListAdd(List *list, void *data) {
   if (list->size >= list->capacity) {
     list->capacity *= 2;
-    *list->data = realloc(list->data, list->capacity * sizeof(void *));
+    list->data = realloc(list->data, list->capacity * sizeof(void *));
 
     if (list->data == NULL) {
       fprintf(
@@ -49,7 +49,8 @@ void ListAdd(List *list, void *data) {
     }
   }
 
-  list->data[list->size++] = data;
+  list->data[list->size] = data;
+  list->size += 1;
 }
 
 void ListRemove(List *list, void *data) {
@@ -57,13 +58,68 @@ void ListRemove(List *list, void *data) {
     if (list->data[i] == data) {
       list->data[i] = list->data[list->size - 1];
       list->data[list->size - 1] = NULL;
-      list->size--;
+      list->size -= 1;
       return;
     }
   }
 
   fprintf(stderr, "Failed to remove data from list. Data not found\n");
   exit(EXIT_FAILURE);
+}
+
+bool ListContains(List *list, void *data) {
+    if (list->size <= 0) {
+        printf("#List may not contain any data when size is 0");
+        return false;
+    }
+    
+    if (data == NULL) {
+        fprintf(stderr, "\n'void *data' passed in function #ListContains() throws NullPointerException");
+        exit(EXIT_FAILURE);
+        return false;
+    }
+    
+    for (size_t i = 0; i < list->size; i++) {
+        if (list->data[i] == data) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+List *ListFilter(List *list, bool (*predicate)(void *)) {
+    List *filtered = NewList(NULL);
+
+    for (int i = 0; i < list->size; i++) {
+        if (predicate(list->data[i])) {
+            ListAdd(filtered, list->data[i]);
+        }
+    }
+
+    return filtered;
+}
+
+void ListForEach(List *list, void (*function)(void *)) {
+    for (int i = 0; i < list->size; i++) {
+        function(list->data[i]);
+    }
+}
+
+void *ListGet(List *list, unsigned int index) {
+  if (index >= list->size) {
+    fprintf(stderr, "\n#List struct ArrayIndexOutOfBoundsException: '%i' \n Failed to fetch data from list.\n", index);
+    exit(EXIT_FAILURE);
+    return NULL;
+  }
+
+  if (list->data[index] == NULL) {
+    fprintf(stderr, "\n#List struct NullPointerException: '%i' \n Failed to fetch data from list.\n", index);
+    exit(EXIT_FAILURE);
+    return NULL;
+  }
+
+  return list->data[index];
 }
 
 void ListPop(List *list) {
@@ -74,7 +130,7 @@ void ListPop(List *list) {
 
   void *last = ListLast(list);
   last = NULL;
-  list->size--;
+  list->size -= 1;
 }
 
 void *ListFirst(List *list) {

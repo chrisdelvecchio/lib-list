@@ -3,7 +3,8 @@
 #include "liblist.h"
 
 // -> Create a new Empty list                              = NewList(NULL);
-// -> Create a new list from a copy                        = NewList(List *source);
+// -> Create a new list from a copy                        = NewList(List
+// *source);
 
 // -> Add an element to the list                           = ListAdd(List *list,
 // void *data);
@@ -43,7 +44,9 @@ int main(void) {
   ListAdd(list, &num2);
 
   printf("From 0 index: %d\n", *((int *)list->data[0]));
-  printf("Size of our list = %d\n", list->size);
+
+  printf("List Fetch Get Test (0 index): %d\n", *((int *)ListGet(list, -1)));
+  printf("\nSize of our list = %d\n", list->size);
 
   printf("First element in the list = %d\n", *((int *)ListFirst(list)));
   printf("Last element in the list = %d\n", *((int *)ListLast(list)));

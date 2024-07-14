@@ -116,6 +116,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named list
+
+# Build rule for target.
+list: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 list
+.PHONY : list
+
+# fast build rule for target.
+list/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\list.dir\build.make CMakeFiles/list.dir/build
+.PHONY : list/fast
+
+#=============================================================================
 # Target rules for targets named liblist
 
 # Build rule for target.
@@ -133,6 +146,7 @@ src/liblist.obj: src/liblist.c.obj
 
 # target to build an object file
 src/liblist.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\list.dir\build.make CMakeFiles/list.dir/src/liblist.c.obj
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\liblist.dir\build.make CMakeFiles/liblist.dir/src/liblist.c.obj
 .PHONY : src/liblist.c.obj
 
@@ -141,6 +155,7 @@ src/liblist.i: src/liblist.c.i
 
 # target to preprocess a source file
 src/liblist.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\list.dir\build.make CMakeFiles/list.dir/src/liblist.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\liblist.dir\build.make CMakeFiles/liblist.dir/src/liblist.c.i
 .PHONY : src/liblist.c.i
 
@@ -149,6 +164,7 @@ src/liblist.s: src/liblist.c.s
 
 # target to generate assembly for a file
 src/liblist.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\list.dir\build.make CMakeFiles/list.dir/src/liblist.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\liblist.dir\build.make CMakeFiles/liblist.dir/src/liblist.c.s
 .PHONY : src/liblist.c.s
 
@@ -185,6 +201,7 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... liblist
+	@echo ... list
 	@echo ... src/liblist.obj
 	@echo ... src/liblist.i
 	@echo ... src/liblist.s
