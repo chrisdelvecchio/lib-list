@@ -53,13 +53,35 @@ void ListAdd(List *list, void *data) {
   list->size += 1;
 }
 
-void ListRemove(List *list, void *data) {
-  for (int i = 0; i < list->size; i++) {
+static inline void HandleElementRemove(List *list, size_t index) {
+  list->data[index] = list->data[list->size - 1];
+  list->data[list->size - 1] = NULL;
+  list->size -= 1;
+}
+
+void *ListRemoveIndex(List *list, unsigned int index) {
+  if (list->size == 0) {
+    fprintf(stderr, "Failed to remove by index '%i' from list. List is empty\n",
+            index);
+    exit(EXIT_FAILURE);
+    return NULL;
+  }
+
+  for (size_t i = 0; i < list->size; i++) {
+    void *data = ListGet(list, index);
+    HandleElementRemove(list, index);
+
+    if (data != NULL) {
+      return data;
+    }
+  }
+}
+
+void *ListRemove(List *list, void *data) {
+  for (size_t i = 0; i < list->size; i++) {
     if (list->data[i] == data) {
-      list->data[i] = list->data[list->size - 1];
-      list->data[list->size - 1] = NULL;
-      list->size -= 1;
-      return;
+      HandleElementRemove(list, i);
+      return data;
     }
   }
 
@@ -68,53 +90,61 @@ void ListRemove(List *list, void *data) {
 }
 
 bool ListContains(List *list, void *data) {
-    if (list->size <= 0) {
-        printf("#List may not contain any data when size is 0");
-        return false;
-    }
-    
-    if (data == NULL) {
-        fprintf(stderr, "\n'void *data' passed in function #ListContains() throws NullPointerException");
-        exit(EXIT_FAILURE);
-        return false;
-    }
-    
-    for (size_t i = 0; i < list->size; i++) {
-        if (list->data[i] == data) {
-            return true;
-        }
-    }
-    
+  if (list->size <= 0) {
+    printf("#List may not contain any data when size is 0");
     return false;
+  }
+
+  if (data == NULL) {
+    fprintf(stderr,
+            "\n'void *data' passed in function #ListContains() throws "
+            "NullPointerException");
+    exit(EXIT_FAILURE);
+    return false;
+  }
+
+  for (size_t i = 0; i < list->size; i++) {
+    if (list->data[i] == data) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 List *ListFilter(List *list, bool (*predicate)(void *)) {
-    List *filtered = NewList(NULL);
+  List *filtered = NewList(NULL);
 
-    for (int i = 0; i < list->size; i++) {
-        if (predicate(list->data[i])) {
-            ListAdd(filtered, list->data[i]);
-        }
+  for (size_t i = 0; i < list->size; i++) {
+    if (predicate(list->data[i])) {
+      ListAdd(filtered, list->data[i]);
     }
+  }
 
-    return filtered;
+  return filtered;
 }
 
 void ListForEach(List *list, void (*function)(void *)) {
-    for (int i = 0; i < list->size; i++) {
-        function(list->data[i]);
-    }
+  for (size_t i = 0; i < list->size; i++) {
+    function(list->data[i]);
+  }
 }
 
 void *ListGet(List *list, unsigned int index) {
   if (index >= list->size) {
-    fprintf(stderr, "\n#List struct ArrayIndexOutOfBoundsException: '%i' \n Failed to fetch data from list.\n", index);
+    fprintf(stderr,
+            "\n#List struct ArrayIndexOutOfBoundsException: '%i' \n Failed to "
+            "fetch data from list.\n",
+            index);
     exit(EXIT_FAILURE);
     return NULL;
   }
 
   if (list->data[index] == NULL) {
-    fprintf(stderr, "\n#List struct NullPointerException: '%i' \n Failed to fetch data from list.\n", index);
+    fprintf(stderr,
+            "\n#List struct NullPointerException: '%i' \n Failed to fetch data "
+            "from list.\n",
+            index);
     exit(EXIT_FAILURE);
     return NULL;
   }
@@ -126,6 +156,7 @@ void ListPop(List *list) {
   if (list->size == 0) {
     fprintf(stderr, "Failed to pop element from list. List is empty\n");
     exit(EXIT_FAILURE);
+    return NULL;
   }
 
   void *last = ListLast(list);
@@ -137,6 +168,7 @@ void *ListFirst(List *list) {
   if (list->size == 0) {
     fprintf(stderr, "Failed to get first element from list. List is empty\n");
     exit(EXIT_FAILURE);
+    return NULL;
   }
 
   return list->data[0];
@@ -146,13 +178,14 @@ void *ListLast(List *list) {
   if (list->size == 0) {
     fprintf(stderr, "Failed to get last element from list. List is empty\n");
     exit(EXIT_FAILURE);
+    return NULL;
   }
 
   return list->data[list->size - 1];
 }
 
 void *ListNext(List *list, void *data) {
-  for (int i = 0; i < list->size; i++) {
+  for (size_t i = 0; i < list->size; i++) {
     if (list->data[i] == data) {
       return list->data[i + 1];
     }
@@ -160,10 +193,11 @@ void *ListNext(List *list, void *data) {
 
   fprintf(stderr, "Failed to get next element from list. Data not found\n");
   exit(EXIT_FAILURE);
+  return NULL;
 }
 
 void *ListPrev(List *list, void *data) {
-  for (int i = 0; i < list->size; i++) {
+  for (size_t i = 0; i < list->size; i++) {
     if (list->data[i] == data) {
       return list->data[i - 1];
     }
@@ -171,10 +205,11 @@ void *ListPrev(List *list, void *data) {
 
   fprintf(stderr, "Failed to get previous element from list. Data not found\n");
   exit(EXIT_FAILURE);
+  return NULL;
 }
 
 void ListCopy(List *source, List *dest) {
-  for (int i = 0; i < source->size; i++) {
+  for (size_t i = 0; i < source->size; i++) {
     ListAdd(dest, source->data[i]);
   }
 

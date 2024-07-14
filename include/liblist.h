@@ -13,7 +13,8 @@ typedef struct List {
 List *NewList(List *optional); // Creates a new empty List
 void ListFreeMemory(List *list); // Free memory allocated by List
 void ListAdd(List *list, void *data); // Add an element to the List
-void ListRemove(List *list, void *data); // Remove an element from the List
+void *ListRemoveIndex(List *list, unsigned int index); // Remove the element from the List by index and return the element
+void *ListRemove(List *list, void *data); // Remove the element from the List and return the element
 bool ListContains(List *list, void *data); // Returns true if the list contains the element passed, or else false.
 
 /*
