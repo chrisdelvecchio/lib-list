@@ -23,6 +23,7 @@ CMakeFiles/liblist.dir/src/liblist.c.obj: C:/Users/fleek/CProjects/lib-list/src/
   C:/msys64/ucrt64/include/vadefs.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/limits.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/mm_malloc.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/stdbool.h \
   C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/syslimits.h
 
 CMakeFiles/liblist.dir/src/main.c.obj: C:/Users/fleek/CProjects/lib-list/src/main.c \
@@ -37,7 +38,8 @@ CMakeFiles/liblist.dir/src/main.c.obj: C:/Users/fleek/CProjects/lib-list/src/mai
   C:/msys64/ucrt64/include/sec_api/stdio_s.h \
   C:/msys64/ucrt64/include/stdio.h \
   C:/msys64/ucrt64/include/swprintf.inl \
-  C:/msys64/ucrt64/include/vadefs.h
+  C:/msys64/ucrt64/include/vadefs.h \
+  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/stdbool.h
 
 
 C:/msys64/ucrt64/include/malloc.h:
@@ -59,6 +61,8 @@ C:/msys64/ucrt64/include/stdlib.h:
 C:/msys64/ucrt64/include/corecrt_wstdlib.h:
 
 C:/msys64/ucrt64/include/_mingw_off_t.h:
+
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/stdbool.h:
 
 C:/msys64/ucrt64/include/corecrt.h:
 

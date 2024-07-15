@@ -12,10 +12,8 @@ typedef struct List {
 
 /*
  TODO:
-   Implement the following functions
-    - int indexOf(void *data);
-    - bool addAll(List *collection, List *myList);
-    - void shuffle(List *list);
+   Just ideas here..
+   Maybe we should make another List structure with function pointers instead?
 */
 
 List *NewList(List *optional); // Creates a new empty List
@@ -72,8 +70,10 @@ List *ListFilter(List *list, bool (*predicate)(void *)); // Returns a new list c
     ListForEach(evenNumbers, handle);
 */
 void ListForEach(List *list, void (*function)(void *)); // Applies a function to each element in the list.
+void ListShuffle(List *list); // Shuffle the list's elements
 
-void *ListGet(List *list, unsigned int index); // Gets element at index (THROWS EXCEPTION if index is out of bounds) and return it.
+void *ListGet(List *list, unsigned int index); // Gets element at index or (THROWS EXCEPTION if index is out of bounds) and return it.
+int ListIndexOf(List *list, void *data);  // Return the element at index or(THROWS EXCEPTION if data is NULL and will return -1)
 void *ListPop(List *list); // Removes last element from List and returns it.
 void *ListFirst(List *list); // Gets first element from List and returns it.
 void *ListLast(List *list); // Gets last element from List and returns it.

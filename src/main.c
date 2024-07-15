@@ -39,27 +39,44 @@
 int main(void) {
   List *list = NewList(NULL);
 
-  int num = 69, num2 = 420;
+  int num = 69, num2 = 420, num3 = 512, num4 = 1024, num5 = 2048, num6 = 4096;
   ListAdd(list, &num);
   ListAdd(list, &num2);
+  ListAdd(list, &num3);
+  ListAdd(list, &num4);
+  ListAdd(list, &num5);
+  ListAdd(list, &num6);
 
-  printf("From 0 index: %d\n", *((int *)list->data[0]));
+  printf("\nOriginal List:\n");
+  printf("List size: %zu\n", list->size);
+  for (size_t i = 0; i < list->size; i++) {
+    printf(" - %d\n", *((int *)ListGet(list, i)));
+  }
 
-  printf("List Fetch Get Test (0 index): %d\n", *((int *)ListGet(list, -1)));
-  printf("\nSize of our list = %d\n", list->size);
+  ListShuffle(list);
+  printf("\nShuffled List:\n");
+  
+  printf("List size: %zu\n", list->size);
+  for (size_t i = 0; i < list->size; i++) {
+    printf(" - %d\n", *((int *)ListGet(list, i)));
+  }
 
-  printf("First element in the list = %d\n", *((int *)ListFirst(list)));
-  printf("Last element in the list = %d\n", *((int *)ListLast(list)));
+  // printf("List Fetch Get Test (0 index): %d\n", *((int *)ListGet(list, -1)));
+  // printf("\nSize of our list = %d\n", list->size);
 
-  ListPop(list);
-  printf("Size of our list after POP = %d\n", list->size);
-  printf("Last element after POP = %d\n", *((int *)ListLast(list)));
+  // printf("First element in the list = %d\n", *((int *)ListFirst(list)));
+  // printf("Last element in the list = %d\n", *((int *)ListLast(list)));
 
-  List *newList = NewList(list);
+  // ListPop(list);
+  // printf("Size of our list after POP = %d\n", list->size);
+  // printf("Last element after POP = %d\n", *((int *)ListLast(list)));
 
-  printf("\n --- NEW LIST ---\nSize of our new list = %d\n", newList->size);
-  printf("Last element in the COPIED list = %d\n", *((int *)ListLast(newList)));
+  // List *newList = NewList(list);
 
+  // printf("\n --- NEW LIST ---\nSize of our new list = %d\n", newList->size);
+  // printf("Last element in the COPIED list = %d\n", *((int *)ListLast(newList)));
+
+  printf("\nEnd of program");
   ListFreeMemory(list);
   return 0;
 }
