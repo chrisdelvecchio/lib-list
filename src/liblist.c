@@ -53,6 +53,19 @@ void ListAdd(List *list, void *data) {
   list->size += 1;
 }
 
+void *ListSet(List *list, unsigned int index, void *data) {
+  if (index >= list->size) {
+    fprintf(stderr, "Failed to set data at index '%i'. Index out of bounds\n",
+            index);
+    exit(EXIT_FAILURE);
+    return NULL;
+  }
+
+  void *old_data = list->data[index];
+  list->data[index] = data;
+  return old_data;
+}
+
 static inline void HandleElementRemove(List *list, size_t index) {
   list->data[index] = list->data[list->size - 1];
   list->data[list->size - 1] = NULL;
@@ -60,8 +73,8 @@ static inline void HandleElementRemove(List *list, size_t index) {
 }
 
 void *ListRemoveIndex(List *list, unsigned int index) {
-  if (list->size == 0) {
-    fprintf(stderr, "Failed to remove by index '%i' from list. List is empty\n",
+  if (isListEmpty(list)) {
+    fprintf(stderr, "LIST REMOVE BY INDEX EXCEPTION: Failed to remove by index '%i' from list. List is empty\n",
             index);
     exit(EXIT_FAILURE);
     return NULL;
@@ -85,19 +98,33 @@ void *ListRemove(List *list, void *data) {
     }
   }
 
-  fprintf(stderr, "Failed to remove data from list. Data not found\n");
+  fprintf(stderr, "LIST REMOVE EXCEPTION: Failed to remove data from list. Data not found\n");
   exit(EXIT_FAILURE);
 }
 
+void ListClear(List *list) {
+  if (isListEmpty(list)) {
+    fprintf(stderr, "LIST CLEAR EXCEPTION: Failed to clear list. List is already empty\n");
+    exit(EXIT_FAILURE);
+    return;
+  }
+
+  for (size_t i = 0; i < list->size; i++) {
+    list->data[i] = NULL;
+  }
+
+  list->size = 0;
+}
+
 bool ListContains(List *list, void *data) {
-  if (list->size <= 0) {
-    printf("#List may not contain any data when size is 0");
+  if (isListEmpty(list)) {
+    printf("LIST QUERY EXCEPTION: #List may not contain any data when size is 0");
     return false;
   }
 
   if (data == NULL) {
     fprintf(stderr,
-            "\n'void *data' passed in function #ListContains() throws "
+            "\n'LIST QUERY EXCEPTION: void *data' passed in function #ListContains() throws "
             "NullPointerException");
     exit(EXIT_FAILURE);
     return false;
@@ -133,7 +160,7 @@ void ListForEach(List *list, void (*function)(void *)) {
 void *ListGet(List *list, unsigned int index) {
   if (index >= list->size) {
     fprintf(stderr,
-            "\n#List struct ArrayIndexOutOfBoundsException: '%i' \n Failed to "
+            "\nLIST GET EXCEPTION: #List struct ArrayIndexOutOfBoundsException: '%i' \n Failed to "
             "fetch data from list.\n",
             index);
     exit(EXIT_FAILURE);
@@ -142,7 +169,7 @@ void *ListGet(List *list, unsigned int index) {
 
   if (list->data[index] == NULL) {
     fprintf(stderr,
-            "\n#List struct NullPointerException: '%i' \n Failed to fetch data "
+            "\nLIST GET EXCEPTION: #List struct NullPointerException: '%i' \n Failed to fetch data "
             "from list.\n",
             index);
     exit(EXIT_FAILURE);
@@ -152,21 +179,20 @@ void *ListGet(List *list, unsigned int index) {
   return list->data[index];
 }
 
-void ListPop(List *list) {
-  if (list->size == 0) {
-    fprintf(stderr, "Failed to pop element from list. List is empty\n");
+void *ListPop(List *list) {
+  if (isListEmpty(list)) {
+    fprintf(stderr, "LIST POP EXCEPTION: Failed to pop element from list. List is empty\n");
     exit(EXIT_FAILURE);
     return NULL;
   }
 
-  void *last = ListLast(list);
-  last = NULL;
-  list->size -= 1;
+  void *last = ListRemove(list, ListLast(list));
+  return last;
 }
 
 void *ListFirst(List *list) {
-  if (list->size == 0) {
-    fprintf(stderr, "Failed to get first element from list. List is empty\n");
+  if (isListEmpty(list)) {
+    fprintf(stderr, "LIST QUERY FIRST EXCEPTION: Failed to get first element from list. List is empty\n");
     exit(EXIT_FAILURE);
     return NULL;
   }
@@ -175,8 +201,8 @@ void *ListFirst(List *list) {
 }
 
 void *ListLast(List *list) {
-  if (list->size == 0) {
-    fprintf(stderr, "Failed to get last element from list. List is empty\n");
+  if (isListEmpty(list)) {
+    fprintf(stderr, "LIST QUERY LAST EXCEPTION: Failed to get last element from list. List is empty\n");
     exit(EXIT_FAILURE);
     return NULL;
   }
@@ -191,7 +217,7 @@ void *ListNext(List *list, void *data) {
     }
   }
 
-  fprintf(stderr, "Failed to get next element from list. Data not found\n");
+  fprintf(stderr, "LIST QUERY NEXT EXCEPTION: Failed to get next element from list. Data not found\n");
   exit(EXIT_FAILURE);
   return NULL;
 }
@@ -203,9 +229,15 @@ void *ListPrev(List *list, void *data) {
     }
   }
 
-  fprintf(stderr, "Failed to get previous element from list. Data not found\n");
+  fprintf(stderr, "LIST QUERY PREVIOUS EXCEPTION: Failed to get previous element from list. Data not found\n");
   exit(EXIT_FAILURE);
   return NULL;
+}
+
+size_t ListSize(List *list) { return list->size; }
+bool isListEmpty(List *list) {
+  if (ListSize(list) == 0) return true;
+  return false;
 }
 
 void ListCopy(List *source, List *dest) {
