@@ -42,6 +42,12 @@ int GreatestToLeast(const void *a, const void *b) {
   return (int_a - int_b);  // Sort from greatest to least
 }
 
+bool IsEqual(void *data) {
+  int target = 512;
+  int value = *((int *)data);
+  return value == target;
+}
+
 int main(void) {
   List *list = NewList(NULL);
 
@@ -71,6 +77,13 @@ int main(void) {
   printf("Sorted list:\n");
   for (size_t i = 0; i < list->size; i++) {
     printf(" - %d\n", *((int *)ListGet(list, i)));
+  }
+
+  void *foundElement = ListFind(list, IsEqual);
+  if (foundElement) {
+    printf("\nElement found: %d\n", *((int *)foundElement));
+  } else {
+    printf("\nElement not found\n");
   }
 
   // ListRemoveIndex(list, 0);

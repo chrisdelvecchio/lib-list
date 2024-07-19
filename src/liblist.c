@@ -144,6 +144,22 @@ List *ListFilter(List *list, bool (*predicate)(void *)) {
   return filtered;
 }
 
+void *ListFind(List *list, bool (*predicate)(void *)) {
+  if (isListEmpty(list)) {
+    printf("LIST FIND EXCEPTION: #List may not contain any data when size is 0");
+    return NULL;
+  }
+
+  for (size_t i = 0; i < list->size; i++) {
+    if (predicate(list->data[i])) {
+      return list->data[i];
+    }
+  }
+
+  // fprintf(stderr, "LIST FIND EXCEPTION: Failed to find data in list. Predicate not met\n");
+  return NULL;
+}
+
 void ListSort(List *list, int (*compare)(const void *, const void *)) {
   if (isListEmpty(list) || ListSize(list) == 1) {
     printf("LIST SORT EXCEPTION: #List cannot be sorted when size is 0 or 1");
@@ -188,10 +204,10 @@ void *ListGet(List *list, unsigned int index) {
   }
 
   if (list->data[index] == NULL) {
-    fprintf(stderr,
-            "\nLIST GET EXCEPTION: #List struct NullPointerException: '%i' \n Failed to fetch data "
-            "from list.\n",
-            index);
+    // fprintf(stderr,
+    //         "\nLIST GET EXCEPTION: #List struct NullPointerException: '%i' \n Failed to fetch data "
+    //         "from list.\n",
+    //         index);
     return NULL;
   }
 
@@ -205,9 +221,9 @@ int ListIndexOf(List *list, void *data) {
   }
 
   if (data == NULL) {
-    fprintf(stderr,
-            "\nLIST INDEXOF QUERY EXCEPTION: void *data' passed in function #ListIndexOf() throws "
-            "NullPointerException");
+    // fprintf(stderr,
+    //         "\nLIST INDEXOF QUERY EXCEPTION: void *data' passed in function #ListIndexOf() throws "
+    //         "NullPointerException");
     return -1;
   }
 
@@ -255,7 +271,7 @@ void *ListNext(List *list, void *data) {
     }
   }
 
-  fprintf(stderr, "LIST QUERY NEXT EXCEPTION: Failed to get next element from list. Data not found\n");
+  // fprintf(stderr, "LIST QUERY NEXT EXCEPTION: Failed to get next element from list. Data not found\n");
   return NULL;
 }
 
@@ -266,7 +282,7 @@ void *ListPrev(List *list, void *data) {
     }
   }
 
-  fprintf(stderr, "LIST QUERY PREVIOUS EXCEPTION: Failed to get previous element from list. Data not found\n");
+  // fprintf(stderr, "LIST QUERY PREVIOUS EXCEPTION: Failed to get previous element from list. Data not found\n");
   return NULL;
 }
 
