@@ -36,6 +36,12 @@
 // -> Copy list to another list                            = ListCopy(List
 // *source, List *dest);
 
+int GreatestToLeast(const void *a, const void *b) {
+  int int_a = *((int *)a);
+  int int_b = *((int *)b);
+  return (int_a - int_b);  // Sort from greatest to least
+}
+
 int main(void) {
   List *list = NewList(NULL);
 
@@ -55,14 +61,29 @@ int main(void) {
 
   ListShuffle(list);
   printf("\nShuffled List:\n");
-  
+
   printf("List size: %zu\n", list->size);
   for (size_t i = 0; i < list->size; i++) {
     printf(" - %d\n", *((int *)ListGet(list, i)));
   }
 
-  // printf("List Fetch Get Test (0 index): %d\n", *((int *)ListGet(list, -1)));
-  // printf("\nSize of our list = %d\n", list->size);
+  ListSort(list, GreatestToLeast);
+  printf("Sorted list:\n");
+  for (size_t i = 0; i < list->size; i++) {
+    printf(" - %d\n", *((int *)ListGet(list, i)));
+  }
+
+  // ListRemoveIndex(list, 0);
+  // ListPop(list);
+  // printf("\nIndex of num 69: %i\n", ListIndexOf(list, &num));
+
+  // printf("Updated list:\n");
+  // for (size_t i = 0; i < list->size; i++) {
+  //   printf(" - %d\n", *((int *)ListGet(list, i)));
+  // }
+
+  // printf("List Fetch Get Test (-1 index): %d\n", *((int *)ListGet(list,
+  // -1))); printf("\nSize of our list = %d\n", list->size);
 
   // printf("First element in the list = %d\n", *((int *)ListFirst(list)));
   // printf("Last element in the list = %d\n", *((int *)ListLast(list)));
@@ -74,7 +95,8 @@ int main(void) {
   // List *newList = NewList(list);
 
   // printf("\n --- NEW LIST ---\nSize of our new list = %d\n", newList->size);
-  // printf("Last element in the COPIED list = %d\n", *((int *)ListLast(newList)));
+  // printf("Last element in the COPIED list = %d\n", *((int
+  // *)ListLast(newList)));
 
   printf("\nEnd of program");
   ListFreeMemory(list);

@@ -144,6 +144,15 @@ List *ListFilter(List *list, bool (*predicate)(void *)) {
   return filtered;
 }
 
+void ListSort(List *list, int (*compare)(const void *, const void *)) {
+  if (isListEmpty(list) || ListSize(list) == 1) {
+    printf("LIST SORT EXCEPTION: #List cannot be sorted when size is 0 or 1");
+    return;
+  }
+
+  qsort(list->data, list->size, sizeof(void *), compare);
+}
+
 void ListForEach(List *list, void (*function)(void *)) {
   for (size_t i = 0; i < list->size; i++) {
     function(list->data[i]);

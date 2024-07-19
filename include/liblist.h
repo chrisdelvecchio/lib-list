@@ -43,6 +43,8 @@ bool ListContains(List *list, void *data); // Returns true if the list contains 
 */
 List *ListFilter(List *list, bool (*predicate)(void *)); // Returns a new list consisting of the elements of this provided list that match the provided predicate.
 
+void ListSort(List *list, int (*compare)(const void *, const void *)); // Sort the elements of the list according to the provided predicate
+
 /*
     -> #ListForEach()
     -> Example usage:
