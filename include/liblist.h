@@ -24,6 +24,7 @@ void ListFreeMemory(List *list);
 
 // Add an element to the List
 void ListAdd(List *list, void *data);
+void ListAddArray(List *list, void **data);
 
 // Set an element to the specified index and return the element
 void *ListSet(List *list, unsigned int index, void *data);

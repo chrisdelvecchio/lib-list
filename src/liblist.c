@@ -51,6 +51,19 @@ void ListAdd(List *list, void *data) {
   list->size += 1;
 }
 
+void ListAddArray(List *list, void **data) {
+  size_t incoming = sizeof(data) / sizeof(data[0]);
+  
+  if (incoming <= 0) {
+    fprintf(stderr, "LIST ADD ARRAY EXCEPTION: Incoming 'data' array is empty, cannot add the array to the List\n");
+    return;
+  }
+
+  for (size_t i = 0; data[i] != NULL; i++) {
+    ListAdd(list, data[i]);
+  }
+}
+
 void *ListSet(List *list, unsigned int index, void *data) {
   if (index >= list->size) {
     fprintf(stderr, "LIST SET EXCEPTION: Failed to set data at index '%i'. Index out of bounds\n",
