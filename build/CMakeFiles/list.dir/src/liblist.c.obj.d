@@ -20,7 +20,10 @@ CMakeFiles/list.dir/src/liblist.c.obj: \
  C:/msys64/ucrt64/include/sec_api/stdlib_s.h \
  C:/msys64/ucrt64/include/malloc.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/mm_malloc.h \
- C:/msys64/ucrt64/include/errno.h C:/msys64/ucrt64/include/time.h \
+ C:/msys64/ucrt64/include/errno.h \
+ C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/stdarg.h \
+ C:/msys64/ucrt64/include/stdarg.h \
+ C:/msys64/ucrt64/include/_mingw_stdarg.h C:/msys64/ucrt64/include/time.h \
  C:/msys64/ucrt64/include/sys/timeb.h \
  C:/msys64/ucrt64/include/sec_api/sys/timeb_s.h \
  C:/msys64/ucrt64/include/_timeval.h \

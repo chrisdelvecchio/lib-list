@@ -1,6 +1,7 @@
 #include "liblist.h"
 
 #include <stdlib.h>
+#include <stdarg.h>
 #include <time.h>
 
 List *NewList(List *optional) {
@@ -53,9 +54,11 @@ void ListAdd(List *list, void *data) {
 
 void ListAddArray(List *list, void **data) {
   size_t incoming = sizeof(data) / sizeof(data[0]);
-  
+
   if (incoming <= 0) {
-    fprintf(stderr, "LIST ADD ARRAY EXCEPTION: Incoming 'data' array is empty, cannot add the array to the List\n");
+    fprintf(stderr,
+            "LIST ADD ARRAY EXCEPTION: Incoming 'data' array is empty, cannot "
+            "add the array to the List\n");
     return;
   }
 
@@ -64,9 +67,33 @@ void ListAddArray(List *list, void **data) {
   }
 }
 
+void ListAddAll(List *dest, ...) {
+  va_list ap;
+  va_start(ap, dest);
+
+  List *list;
+
+  while ((list = va_arg(ap, List *)) != NULL) {
+    if (isListEmpty(list)) {
+      fprintf(stderr,
+              "LIST ADD ALL EXCEPTION: One of the incoming lists is empty, "
+              "cannot add its elements to the destination List\n");
+      break;
+    }
+    
+    for (size_t i = 0; i < list->size; i++) {
+      ListAdd(dest, list->data[i]);
+    }
+  }
+
+  va_end(ap);
+}
+
 void *ListSet(List *list, unsigned int index, void *data) {
   if (index >= list->size) {
-    fprintf(stderr, "LIST SET EXCEPTION: Failed to set data at index '%i'. Index out of bounds\n",
+    fprintf(stderr,
+            "LIST SET EXCEPTION: Failed to set data at index '%i'. Index out "
+            "of bounds\n",
             index);
     return NULL;
   }
@@ -84,7 +111,9 @@ static inline void HandleElementRemove(List *list, size_t index) {
 
 void *ListRemoveIndex(List *list, unsigned int index) {
   if (isListEmpty(list)) {
-    fprintf(stderr, "LIST REMOVE BY INDEX EXCEPTION: Failed to remove by index '%i' from list. List is empty\n",
+    fprintf(stderr,
+            "LIST REMOVE BY INDEX EXCEPTION: Failed to remove by index '%i' "
+            "from list. List is empty\n",
             index);
     return NULL;
   }
@@ -107,12 +136,16 @@ void *ListRemove(List *list, void *data) {
     }
   }
 
-  fprintf(stderr, "LIST REMOVE EXCEPTION: Failed to remove data from list. Data not found\n");
+  fprintf(stderr,
+          "LIST REMOVE EXCEPTION: Failed to remove data from list. Data not "
+          "found\n");
 }
 
 void ListClear(List *list) {
   if (isListEmpty(list)) {
-    fprintf(stderr, "LIST CLEAR EXCEPTION: Failed to clear list. List is already empty\n");
+    fprintf(
+        stderr,
+        "LIST CLEAR EXCEPTION: Failed to clear list. List is already empty\n");
     return;
   }
 
@@ -125,13 +158,15 @@ void ListClear(List *list) {
 
 bool ListContains(List *list, void *data) {
   if (isListEmpty(list)) {
-    printf("LIST QUERY EXCEPTION: #List may not contain any data when size is 0");
+    printf(
+        "LIST QUERY EXCEPTION: #List may not contain any data when size is 0");
     return false;
   }
 
   if (data == NULL) {
     fprintf(stderr,
-            "\n'LIST QUERY EXCEPTION: void *data' passed in function #ListContains() throws "
+            "\n'LIST QUERY EXCEPTION: void *data' passed in function "
+            "#ListContains() throws "
             "NullPointerException");
     return false;
   }
@@ -159,7 +194,8 @@ List *ListFilter(List *list, bool (*predicate)(void *)) {
 
 void *ListFind(List *list, bool (*predicate)(void *)) {
   if (isListEmpty(list)) {
-    printf("LIST FIND EXCEPTION: #List may not contain any data when size is 0");
+    printf(
+        "LIST FIND EXCEPTION: #List may not contain any data when size is 0");
     return NULL;
   }
 
@@ -169,7 +205,8 @@ void *ListFind(List *list, bool (*predicate)(void *)) {
     }
   }
 
-  // fprintf(stderr, "LIST FIND EXCEPTION: Failed to find data in list. Predicate not met\n");
+  // fprintf(stderr, "LIST FIND EXCEPTION: Failed to find data in list.
+  // Predicate not met\n");
   return NULL;
 }
 
@@ -190,12 +227,13 @@ void ListForEach(List *list, void (*function)(void *)) {
 
 void ListShuffle(List *list) {
   if (isListEmpty(list) || ListSize(list) == 1) {
-    printf("LIST SHUFFLE EXCEPTION: #List cannot be shuffled when size is 0 or 1");
+    printf(
+        "LIST SHUFFLE EXCEPTION: #List cannot be shuffled when size is 0 or 1");
     return;
   }
 
   srand((unsigned int)time(NULL));
-  
+
   size_t size = ListSize(list);
 
   for (size_t i = 0; i < size - 1; i++) {
@@ -205,12 +243,13 @@ void ListShuffle(List *list) {
     ListSet(list, i, ListGet(list, randomIndex));
     ListSet(list, randomIndex, temp);
   }
- }
+}
 
 void *ListGet(List *list, unsigned int index) {
   if (index >= list->size) {
     fprintf(stderr,
-            "\nLIST GET EXCEPTION: #List struct ArrayIndexOutOfBoundsException: '%i' \n Failed to "
+            "\nLIST GET EXCEPTION: #List struct "
+            "ArrayIndexOutOfBoundsException: '%i' \n Failed to "
             "fetch data from list.\n",
             index);
     return NULL;
@@ -218,9 +257,8 @@ void *ListGet(List *list, unsigned int index) {
 
   if (list->data[index] == NULL) {
     // fprintf(stderr,
-    //         "\nLIST GET EXCEPTION: #List struct NullPointerException: '%i' \n Failed to fetch data "
-    //         "from list.\n",
-    //         index);
+    //         "\nLIST GET EXCEPTION: #List struct NullPointerException: '%i' \n
+    //         Failed to fetch data " "from list.\n", index);
     return NULL;
   }
 
@@ -229,14 +267,16 @@ void *ListGet(List *list, unsigned int index) {
 
 int ListIndexOf(List *list, void *data) {
   if (isListEmpty(list)) {
-    printf("LIST INDEXOF QUERY EXCEPTION: #List may not contain any data when size is 0");
+    printf(
+        "LIST INDEXOF QUERY EXCEPTION: #List may not contain any data when "
+        "size is 0");
     return -1;
   }
 
   if (data == NULL) {
     // fprintf(stderr,
-    //         "\nLIST INDEXOF QUERY EXCEPTION: void *data' passed in function #ListIndexOf() throws "
-    //         "NullPointerException");
+    //         "\nLIST INDEXOF QUERY EXCEPTION: void *data' passed in function
+    //         #ListIndexOf() throws " "NullPointerException");
     return -1;
   }
 
@@ -251,7 +291,9 @@ int ListIndexOf(List *list, void *data) {
 
 void *ListPop(List *list) {
   if (isListEmpty(list)) {
-    fprintf(stderr, "LIST POP EXCEPTION: Failed to pop element from list. List is empty\n");
+    fprintf(
+        stderr,
+        "LIST POP EXCEPTION: Failed to pop element from list. List is empty\n");
     return NULL;
   }
 
@@ -261,7 +303,9 @@ void *ListPop(List *list) {
 
 void *ListFirst(List *list) {
   if (isListEmpty(list)) {
-    fprintf(stderr, "LIST QUERY FIRST EXCEPTION: Failed to get first element from list. List is empty\n");
+    fprintf(stderr,
+            "LIST QUERY FIRST EXCEPTION: Failed to get first element from "
+            "list. List is empty\n");
     return NULL;
   }
 
@@ -270,7 +314,9 @@ void *ListFirst(List *list) {
 
 void *ListLast(List *list) {
   if (isListEmpty(list)) {
-    fprintf(stderr, "LIST QUERY LAST EXCEPTION: Failed to get last element from list. List is empty\n");
+    fprintf(stderr,
+            "LIST QUERY LAST EXCEPTION: Failed to get last element from list. "
+            "List is empty\n");
     return NULL;
   }
 
@@ -284,7 +330,8 @@ void *ListNext(List *list, void *data) {
     }
   }
 
-  // fprintf(stderr, "LIST QUERY NEXT EXCEPTION: Failed to get next element from list. Data not found\n");
+  // fprintf(stderr, "LIST QUERY NEXT EXCEPTION: Failed to get next element from
+  // list. Data not found\n");
   return NULL;
 }
 
@@ -295,7 +342,8 @@ void *ListPrev(List *list, void *data) {
     }
   }
 
-  // fprintf(stderr, "LIST QUERY PREVIOUS EXCEPTION: Failed to get previous element from list. Data not found\n");
+  // fprintf(stderr, "LIST QUERY PREVIOUS EXCEPTION: Failed to get previous
+  // element from list. Data not found\n");
   return NULL;
 }
 

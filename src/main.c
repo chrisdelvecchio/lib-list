@@ -73,6 +73,8 @@ int main(void) {
     printf(" - %d\n", *((int *)ListGet(list, i)));
   }
 
+  List *thirdList = NewList(list);
+
   ListSort(list, GreatestToLeast);
   printf("Sorted list:\n");
   for (size_t i = 0; i < list->size; i++) {
@@ -84,6 +86,21 @@ int main(void) {
     printf("\nElement found: %d\n", *((int *)foundElement));
   } else {
     printf("\nElement not found\n");
+  }
+
+  List *otherList = NewList(NULL);
+
+  ListAddAll(otherList, list, thirdList, NULL);
+
+  printf("\nOther List:\n");
+  printf("List size: %zu\n", otherList->size);
+  for (size_t i = 0; i < otherList->size; i++) {
+    printf(" - %d\n", *((int *)ListGet(otherList, i)));
+  }
+
+  printf("\nForEach Test\n");
+  foreach(void *i, otherList) {
+    printf(" - %d\n", *((int *)i));
   }
 
   // ListRemoveIndex(list, 0);

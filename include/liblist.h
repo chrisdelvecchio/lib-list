@@ -4,6 +4,23 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+/*
+    -> #foreach(void *i, List *list);
+    -> Example usage:
+    List *list = NewList(NULL);
+
+    foreach(void *i, list) {
+        printf("%d\n", *(int*)i);  // Assuming 'i' is an integer pointer.
+        // Do something with 'i'...
+        // You can also use the following keywords as you would expect from a
+   for loop. These keywords are 'continue', 'break', 'return'.
+    }
+*/
+#define foreach(element, list)                                    \
+  for (size_t keep = 1, count = 0; keep && count != (list)->size; \
+       keep = !keep, count++)                                     \
+    for (element = (list)->data[count]; keep; keep = !keep)
+
 typedef struct List {
   void **data;
   size_t size;
@@ -13,7 +30,6 @@ typedef struct List {
 /*
  TODO:
    Just ideas here..
-   Maybe we should make another List structure with function pointers instead?
 */
 
 // Creates a new empty List
@@ -24,7 +40,25 @@ void ListFreeMemory(List *list);
 
 // Add an element to the List
 void ListAdd(List *list, void *data);
+
+// Add an array of elements to the List
 void ListAddArray(List *list, void **data);
+
+/*
+    -> #ListAddAll(List *dest, List* ...)
+    -> Adds all List* struct's from the provided variadic arguments to the end
+   of this list. \ Basically combining the provided lists... into the 'dest'
+   List* struct
+    -> Example usage:
+
+    // let's pretend that you already have data inside these lists...
+    List *list1 = NewList(NULL);
+    List *list2 = NewList(NULL);
+
+    List *theUltimateList = NewList(NULL);
+    ListAddAll(theUltimateList, list1, list2);
+*/
+void ListAddAll(List *dest, ...);
 
 // Set an element to the specified index and return the element
 void *ListSet(List *list, unsigned int index, void *data);
@@ -67,35 +101,6 @@ void *ListFind(List *list, bool (*predicate)(void *));
 
 /* Sort the elements of the list according to the provided predicate */
 void ListSort(List *list, int (*compare)(const void *, const void *));
-
-/*
-    -> #ListForEach()
-    -> Applies a function to each element in the list
-    -> Example usage:
-
-    -> [with Lambda]
-    #define lambda(lambda$_ret, lambda$_args, lambda$_body)\
-        ({\
-            lambda$_ret lambda$__anon$ lambda$_args\
-            lambda$_body\
-            &lambda$__anon$;\
-        })
-
-    printf("\nForEach evennumber\n");
-    ListForEach(evenNumbers, lambda(void, (void *data), {
-        int i = *((int*) data);
-        printf(" * %d\n", i);
-    }));
-
-    -> [without Lambda]
-
-    void handle(void *data) {
-        printf(" - %d\n", *((int*) data));
-    }
-
-    ListForEach(evenNumbers, handle);
-*/
-void ListForEach(List *list, void (*function)(void *));
 
 /* Shuffle the list's elements */
 void ListShuffle(List *list);
